@@ -1,0 +1,88 @@
+{
+  "name": "@dotdo/nouns",
+  "version": "0.1.0",
+  "description": "Digital Object definitions for business entities",
+  "type": "module",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./people": {
+      "types": "./dist/people.d.ts",
+      "import": "./dist/people.js"
+    },
+    "./business": {
+      "types": "./dist/business.d.ts",
+      "import": "./dist/business.js"
+    },
+    "./products": {
+      "types": "./dist/products.d.ts",
+      "import": "./dist/products.js"
+    },
+    "./software": {
+      "types": "./dist/software.d.ts",
+      "import": "./dist/software.js"
+    },
+    "./agents": {
+      "types": "./dist/agents.d.ts",
+      "import": "./dist/agents.js"
+    },
+    "./market": {
+      "types": "./dist/market.d.ts",
+      "import": "./dist/market.js"
+    },
+    "./goals": {
+      "types": "./dist/goals.d.ts",
+      "import": "./dist/goals.js"
+    },
+    "./process": {
+      "types": "./dist/process.d.ts",
+      "import": "./dist/process.js"
+    },
+    "./strategy": {
+      "types": "./dist/strategy.d.ts",
+      "import": "./dist/strategy.js"
+    },
+    "./content": {
+      "types": "./dist/content.d.ts",
+      "import": "./dist/content.js"
+    },
+    "./experiments": {
+      "types": "./dist/experiments.d.ts",
+      "import": "./dist/experiments.js"
+    },
+    "./integration": {
+      "types": "./dist/integration.d.ts",
+      "import": "./dist/integration.js"
+    }
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "typecheck": "tsc --noEmit",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {},
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  },
+  "keywords": [
+    "digital-objects",
+    "business",
+    "startup",
+    "saas",
+    "agents",
+    "schema",
+    "ai-primitives"
+  ],
+  "author": "",
+  "license": "MIT"
+}
