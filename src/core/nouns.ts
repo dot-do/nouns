@@ -66,7 +66,13 @@ export interface NounMeta {
 }
 
 // The return type: a callable that's also the Noun with $meta
-export type NounType<T> = T & { $meta: NounMeta } & (<E extends Record<string, any>>(extension: E) => NounType<E>)
+// Supports both regular calls (for type extension) and `new` calls (for instance creation)
+export type NounType<T> = T & { $meta: NounMeta } & {
+  // Call signature for extending types: Startup({ $type: 'MyStartup', ... })
+  <E extends Record<string, any>>(extension: E): NounType<E>
+  // Constructor signature for creating instances: new Startup({ $id: 'https://...', ... })
+  new <E extends Record<string, any>>(extension: E): NounType<E>
+}
 
 export function Noun<T extends Record<string, any>>(definition: T): NounType<T> {
   const meta: NounMeta = {
@@ -135,7 +141,10 @@ export function Noun<T extends Record<string, any>>(definition: T): NounType<T> 
     // `new Startup({...})` = create instance (new.target is set)
     // `Startup({...})` with $id = also create instance (for backwards compat)
     // `Startup({ $type: ... })` = extend type
-    const isInstance = new.target || (extension.$id && !extension.$type)
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    const calledWithNew = typeof new.target !== 'undefined'
+    const hasIdNoType = '$id' in extension && !('$type' in extension)
+    const isInstance = calledWithNew || hasIdNoType
 
     return Noun({
       ...extension,
@@ -417,7 +426,7 @@ export const Product = Thing({
 
   // Identity
   slug: 'URL-safe identifier',
-  type: 'SaaS | API | Mobile | Desktop | Physical | Service',
+  productKind: 'SaaS | API | Mobile | Desktop | Physical | Service',
 
   // Business relationship
   business: $.Business,

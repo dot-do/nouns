@@ -131,7 +131,7 @@ export const Product = Thing({
   $type: 'Product',
 
   tagline: 'Short tagline',
-  type: 'SaaS | API | SDK | App | Service | Platform',
+  productKind: 'SaaS | API | SDK | App | Service | Platform',
   status: 'Development | Beta | Live | Sunset | Deprecated',
 
   // Business
@@ -158,7 +158,7 @@ export const Product = Thing({
 export const SaaS = Product({
   $type: 'SaaS',
 
-  type: 'SaaS',
+  productKind: 'SaaS',
 
   // SaaS-specific
   multiTenant: 'Whether multi-tenant',
@@ -202,7 +202,7 @@ export const HeadlessSaaSType = SaaS({
 export const API = Product({
   $type: 'API',
 
-  type: 'API',
+  productKind: 'API',
 
   // API-specific
   version: 'API version',
@@ -232,7 +232,7 @@ export const API = Product({
 export const SDK = Product({
   $type: 'SDK',
 
-  type: 'SDK',
+  productKind: 'SDK',
 
   // SDK-specific
   language: 'JavaScript | TypeScript | Python | Go | Rust | Ruby | Java | C#',
@@ -263,7 +263,7 @@ export const SDK = Product({
 export const App = Product({
   $type: 'App',
 
-  type: 'App',
+  productKind: 'App',
 
   // App-specific
   platform: 'Web | iOS | Android | Desktop | CLI',
@@ -323,7 +323,7 @@ export const Service = Thing({
   $type: 'Service',
 
   // Service definition
-  type: 'Managed | Self-Hosted | Serverless | Edge',
+  deploymentType: 'Managed | Self-Hosted | Serverless | Edge',
   category: 'Infrastructure | Platform | Application',
 
   // Business
@@ -349,7 +349,7 @@ export const Service = Thing({
 export const ManagedService = Service({
   $type: 'ManagedService',
 
-  type: 'Managed',
+  deploymentType: 'Managed',
 
   // Managed-specific
   infrastructure: 'Cloud provider and setup',
@@ -424,7 +424,7 @@ export const Investor = Person({
   $type: 'Investor',
 
   firm: 'Investment firm',
-  type: 'Angel | VC | PE | Corporate | Family Office',
+  investorKind: 'Angel | VC | PE | Corporate | Family Office',
   checkSize: 'Typical check size range',
   stage: 'Stages invested in',
   sectors: 'Sectors of interest',
