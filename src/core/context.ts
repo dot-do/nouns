@@ -141,6 +141,50 @@ export function $Context(contextUrl: string): ContextAPI {
     throw new Error(`Instance not found: ${fullId}`)
   }
 
+  // Create a collection from a promise - this is the key fix
+  // Instead of broken collectionMethods(), we recursively wrap promises with chainable methods
+  function createCollection<T extends Instance>(promise: Promise<T[]>): Collection<T> {
+    const collection = promise as Collection<T>
+
+    collection.where = (predicate: (item: T) => boolean): Collection<T> => {
+      return createCollection(promise.then(items => items.filter(predicate)))
+    }
+
+    collection.first = (): Promise<T | undefined> => {
+      return promise.then(items => items[0])
+    }
+
+    collection.count = (): Promise<number> => {
+      return promise.then(items => items.length)
+    }
+
+    collection.flatMap = <U extends Instance>(fn: (item: T) => Promise<U[]> | U[]): Collection<U> => {
+      const newPromise = promise.then(async items => {
+        const results: U[] = []
+        for (const item of items) {
+          const mapped = await fn(item)
+          results.push(...mapped)
+        }
+        return results
+      })
+      return createCollection(newPromise)
+    }
+
+    collection.map = <U>(fn: (item: T) => U): Promise<U[]> => {
+      return promise.then(items => items.map(fn))
+    }
+
+    collection.filter = (predicate: (item: T) => boolean): Collection<T> => {
+      return createCollection(promise.then(items => items.filter(predicate)))
+    }
+
+    collection.find = (predicate: (item: T) => boolean): Promise<T | undefined> => {
+      return promise.then(items => items.find(predicate))
+    }
+
+    return collection
+  }
+
   // Query instances by type
   function query<T extends Instance>(type: string, filter?: Record<string, any>): Collection<T> {
     // Create a lazy collection
@@ -169,61 +213,11 @@ export function $Context(contextUrl: string): ContextAPI {
       return results
     })()
 
-    // Extend promise with collection methods
-    return Object.assign(promise, {
-      where(predicate: (item: T) => boolean): Collection<T> {
-        return Object.assign(
-          promise.then(items => items.filter(predicate)),
-          collectionMethods<T>()
-        ) as Collection<T>
-      },
-      first(): Promise<T | undefined> {
-        return promise.then(items => items[0])
-      },
-      count(): Promise<number> {
-        return promise.then(items => items.length)
-      },
-      flatMap<U extends Instance>(fn: (item: T) => Promise<U[]> | U[]): Collection<U> {
-        const newPromise = promise.then(async items => {
-          const results: U[] = []
-          for (const item of items) {
-            const mapped = await fn(item)
-            results.push(...mapped)
-          }
-          return results
-        })
-        return Object.assign(newPromise, collectionMethods<U>()) as Collection<U>
-      },
-      map<U>(fn: (item: T) => U): Promise<U[]> {
-        return promise.then(items => items.map(fn))
-      },
-      filter(predicate: (item: T) => boolean): Collection<T> {
-        return Object.assign(
-          promise.then(items => items.filter(predicate)),
-          collectionMethods<T>()
-        ) as Collection<T>
-      },
-      find(predicate: (item: T) => boolean): Promise<T | undefined> {
-        return promise.then(items => items.find(predicate))
-      },
-    }) as Collection<T>
-  }
-
-  // Helper for collection methods
-  function collectionMethods<T extends Instance>() {
-    return {
-      where: (predicate: (item: T) => boolean) => query<T>('', {}), // placeholder
-      first: () => Promise.resolve(undefined as T | undefined),
-      count: () => Promise.resolve(0),
-      flatMap: <U extends Instance>(fn: (item: T) => Promise<U[]> | U[]) => query<U>('', {}),
-      map: <U>(fn: (item: T) => U) => Promise.resolve([] as U[]),
-      filter: (predicate: (item: T) => boolean) => query<T>('', {}),
-      find: (predicate: (item: T) => boolean) => Promise.resolve(undefined as T | undefined),
-    }
+    return createCollection(promise)
   }
 
   // Register an instance in the store
-  function register<T extends Instance>(instance: T): T {
+  function register(instance: Instance): Instance {
     if (instance.$id) {
       store.set(instance.$id, instance)
     }
