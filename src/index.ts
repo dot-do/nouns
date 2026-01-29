@@ -38,6 +38,20 @@ export { $ } from './core/nouns.js'
 export { $Context, inferContext, setContext, getDefaultContext } from './core/context.js'
 export type { Instance, Collection, ContextAPI } from './core/context.js'
 
+// Serialization - Code/Functions <-> JSON/Data
+export {
+  stringifyNoun,
+  serializeNoun,
+  serializeInstance,
+  parseNoun,
+  generateWorkerCode,
+  generateLoaderModule,
+  extractFunctionBody,
+  extractFunctionParams,
+  detectExports,
+} from './core/serialize.js'
+export type { SerializedNoun, SerializedInstance, GeneratorOptions, LoaderOptions, LoaderModule } from './core/serialize.js'
+
 // =============================================================================
 // TYPES
 // =============================================================================
