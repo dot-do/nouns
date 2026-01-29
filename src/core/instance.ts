@@ -9,7 +9,7 @@
  *   Startup({ $id: 'https://...', ... })    → creates an instance
  */
 
-import { $, Noun, NounType, Business, Startup, Product, Customer, Person } from './nouns.js'
+import { $, Noun, NounType, Business, Startup, Product, Customer, Person } from './nouns'
 
 // =============================================================================
 // INSTANCE TYPE

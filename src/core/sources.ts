@@ -9,7 +9,7 @@
  *   $.Stripe.Customer -> syncs to -> customer.stripe
  */
 
-import { $, Noun } from './nouns.js'
+import { $, Noun } from './nouns'
 
 // =============================================================================
 // SOURCE DEFINITION

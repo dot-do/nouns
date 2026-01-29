@@ -4,7 +4,7 @@
  * Comprehensive type definitions for Business-as-Code
  */
 
-import { $, Noun } from './nouns.js'
+import { $, Noun } from './nouns'
 
 const ctx = 'https://schema.org.ai'
 

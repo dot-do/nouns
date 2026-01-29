@@ -11,8 +11,8 @@
  * - Worker code generated as complete strings
  */
 
-import { Noun } from './nouns.js'
-import type { NounMeta, NounType } from './nouns.js'
+import { Noun } from './nouns'
+import type { NounMeta, NounType } from './nouns'
 
 // =============================================================================
 // SERIALIZED NOUN FORMAT
@@ -361,9 +361,9 @@ export function generateLoaderModule(
 
   return {
     id,
-    mainModule: 'worker.js',
+    mainModule: 'worker',
     modules: {
-      'worker.js': workerCode,
+      'worker': workerCode,
       ...externalModules,
     },
     compatibilityDate: '2024-01-01',
@@ -478,7 +478,7 @@ export function detectExports(moduleCode: string): string[] {
 // =============================================================================
 
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const nouns = await import('./nouns.js')
+  const nouns = await import('./nouns')
   const { Startup } = nouns
 
   console.log('=== Noun Serialization Tests ===\n')

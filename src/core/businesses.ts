@@ -11,7 +11,7 @@ import {
   Agent, Service, ManagedService,
   Customer, Tenant, Investor,
   Plan, Subscription, Task, Tool,
-} from './types.js'
+} from './types'
 
 // =============================================================================
 // STARTUPS.STUDIO - The Venture Studio

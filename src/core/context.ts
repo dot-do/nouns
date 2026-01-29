@@ -13,7 +13,7 @@
  *   const startup = await $.Startup('headless.ly')  // context from env/config
  */
 
-import type { NounType, NounMeta } from './nouns.js'
+import type { NounType, NounMeta } from './nouns'
 
 // =============================================================================
 // CONTEXT INFERENCE
